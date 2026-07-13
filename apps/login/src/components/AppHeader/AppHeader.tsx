@@ -1,3 +1,4 @@
+import logo from '@/assets/images/logo.png'
 import IconPlaceholder from '@/components/IconPlaceholder'
 
 const iconButtonClassName =
@@ -21,7 +22,7 @@ function AppHeader({ onMenuClick }: AppHeaderProps) {
         </button>
       </div>
 
-      <span className="text-[1.65rem] font-black tracking-[-0.08em] text-neutral-950">덕행</span>
+      <img alt="덕행" className="size-10 rounded-xl object-cover" src={logo} />
 
       <div className="flex justify-end gap-0.5">
         <button aria-label="검색" className={iconButtonClassName} type="button">

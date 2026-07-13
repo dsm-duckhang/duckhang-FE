@@ -45,7 +45,7 @@
 - Spacing/layout rhythm: 4px 배수 간격과 넉넉한 본문 여백을 사용한다.
 - Shape/radius/elevation: 버튼은 16px 반경, 모바일 프레임에만 약한 그림자를 사용한다.
 - Motion: hover, focus, active 상태의 짧은 색상 전환만 제공한다.
-- Imagery/iconography: 의존성 없는 임시 선형 아이콘을 사용하고 추후 제공 에셋으로 교체한다.
+- Imagery/iconography: 헤더에는 `logo.png` 브랜드 로고를 사용하고, 나머지는 의존성 없는 임시 선형 아이콘을 사용한다.
 
 ## Components
 
@@ -94,6 +94,6 @@
 
 ## Open questions
 
-- [ ] 최종 브랜드 컬러와 로고 에셋 확정 / 제품 담당 / 헤더와 활성 상태 표현에 영향
+- [ ] 최종 브랜드 컬러와 나머지 아이콘 에셋 확정 / 제품 담당 / 활성 상태 표현에 영향
 - [ ] 실제 Google OAuth 계약과 연결 시점 확정 / 인증 담당 / 버튼 상태와 오류 처리에 영향
 - [ ] 행사·스탬프·마이페이지 목적지 라우트 확정 / 제품 담당 / 하단 내비게이션 동작에 영향
