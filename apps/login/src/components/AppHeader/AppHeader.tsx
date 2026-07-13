@@ -1,0 +1,38 @@
+import IconPlaceholder from '@/components/IconPlaceholder'
+
+const iconButtonClassName =
+  'flex size-11 items-center justify-center rounded-full text-neutral-700 transition-colors hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950'
+
+interface AppHeaderProps {
+  onMenuClick: () => void
+}
+
+function AppHeader({ onMenuClick }: AppHeaderProps) {
+  return (
+    <header className="grid h-17 shrink-0 grid-cols-[1fr_auto_1fr] items-center border-b border-neutral-100 bg-white px-3">
+      <div className="flex justify-start">
+        <button
+          aria-label="메뉴 열기"
+          className={iconButtonClassName}
+          onClick={onMenuClick}
+          type="button"
+        >
+          <IconPlaceholder name="menu" />
+        </button>
+      </div>
+
+      <span className="text-[1.65rem] font-black tracking-[-0.08em] text-neutral-950">덕행</span>
+
+      <div className="flex justify-end gap-0.5">
+        <button aria-label="검색" className={iconButtonClassName} type="button">
+          <IconPlaceholder name="search" />
+        </button>
+        <button aria-label="알림" className={iconButtonClassName} type="button">
+          <IconPlaceholder name="bell" />
+        </button>
+      </div>
+    </header>
+  )
+}
+
+export default AppHeader
