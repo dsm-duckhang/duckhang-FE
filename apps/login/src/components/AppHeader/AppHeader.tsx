@@ -24,14 +24,7 @@ function AppHeader({ onMenuClick }: AppHeaderProps) {
 
       <img alt="덕행" className="size-10 rounded-xl object-cover" src={logo} />
 
-      <div className="flex justify-end gap-0.5">
-        <button aria-label="검색" className={iconButtonClassName} type="button">
-          <IconPlaceholder name="search" />
-        </button>
-        <button aria-label="알림" className={iconButtonClassName} type="button">
-          <IconPlaceholder name="bell" />
-        </button>
-      </div>
+      <div />
     </header>
   )
 }
