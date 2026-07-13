@@ -33,5 +33,5 @@ pnpm build
 
 상세한 컴포넌트·폴더·import·Git 규칙은 [CONVENTIONS.md](./CONVENTIONS.md)를 따릅니다. 앱 내부 코드는 `@/` alias, 공통 패키지는 `@repo/*` namespace를 사용합니다.
 
-현재는 초기 디렉터리 구성 단계이므로 각 앱은 앱 이름(`login`, `user`, `admin`)만 렌더링하며 예제 UI는 포함하지 않습니다.
-각 앱의 `src/router/index.tsx`에서 React Router DOM 라우트를 관리하며 현재는 루트 경로(`/`)만 등록되어 있습니다.
+`apps/login`은 Google 계정 전용 모바일 로그인 화면과 헤더·하단 내비게이션·메뉴 바텀시트를 제공합니다. 현재 Google OAuth 및 메뉴별 실제 라우팅은 연결하지 않은 UI 단계입니다.
+`apps/user`와 `apps/admin`은 초기 화면만 렌더링합니다. 각 앱의 `src/router/index.tsx`에서 React Router DOM 라우트를 관리하며 현재는 루트 경로(`/`)만 등록되어 있습니다.
