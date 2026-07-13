@@ -33,7 +33,7 @@ function AppMenuSheet({ currentItem, isOpen, onClose, onItemSelect }: AppMenuShe
     <div className="absolute inset-0 z-20 flex items-end">
       <button
         aria-label="메뉴 닫기"
-        className="absolute inset-0 cursor-default bg-neutral-950/45"
+        className="menu-backdrop-enter absolute inset-0 cursor-default bg-neutral-950/45"
         onClick={onClose}
         type="button"
       />
@@ -41,7 +41,7 @@ function AppMenuSheet({ currentItem, isOpen, onClose, onItemSelect }: AppMenuShe
       <section
         aria-labelledby="menu-sheet-title"
         aria-modal="true"
-        className="relative z-10 w-full rounded-t-[2rem] bg-white px-6 pt-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-[0_-12px_40px_rgba(0,0,0,0.12)]"
+        className="menu-sheet-enter relative z-10 w-full rounded-t-[2rem] bg-white px-6 pt-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-[0_-12px_40px_rgba(0,0,0,0.12)]"
         role="dialog"
       >
         <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-neutral-300" />

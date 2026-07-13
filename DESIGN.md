@@ -44,7 +44,7 @@
 - Typography: Inter, Pretendard, 시스템 sans-serif를 사용하고 핵심 문구의 `‘여행’이다.`를 반전된 굵은 타이포로 강조한다.
 - Spacing/layout rhythm: 4px 배수 간격과 넉넉한 본문 여백을 사용한다.
 - Shape/radius/elevation: 버튼은 16px 반경, 모바일 프레임에만 약한 그림자를 사용한다.
-- Motion: hover, focus, active 상태의 짧은 색상 전환만 제공한다.
+- Motion: 바텀시트는 240ms 동안 아래에서 진입하고 배경은 180ms 동안 페이드인하며, 나머지는 짧은 상태 색상 전환만 제공한다.
 - Imagery/iconography: 헤더에는 `logo.png` 브랜드 로고를 사용하고, 나머지는 의존성 없는 임시 선형 아이콘을 사용한다.
 
 ## Components
@@ -60,7 +60,7 @@
 - Keyboard/focus behavior: 모든 버튼에 가시적인 `focus-visible` 표시를 제공한다.
 - Contrast/readability: 본문은 중립 600 이상, 핵심 텍스트는 중립 950을 사용한다.
 - Screen-reader semantics: 헤더·메인·내비게이션 랜드마크, 버튼 접근성 이름, 현재 메뉴 상태, 바텀시트 dialog 이름을 제공한다.
-- Reduced motion and sensory considerations: 필수 애니메이션을 사용하지 않는다.
+- Reduced motion and sensory considerations: `prefers-reduced-motion` 환경에서는 바텀시트와 배경 진입 애니메이션을 제거한다.
 
 ## Responsive behavior
 
