@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+@source '../../../packages/ui/src';
+
+@layer base {
+  html {
+    font-family: Inter, Pretendard, ui-sans-serif, system-ui, sans-serif;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+  }
+
+  button,
+  input {
+    font: inherit;
+  }
+}

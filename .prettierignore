@@ -1,0 +1,7 @@
+.git
+.omx
+node_modules
+dist
+coverage
+pnpm-lock.yaml
+*.log

@@ -1,0 +1,25 @@
+{
+  "name": "duckhang-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.15.1",
+  "scripts": {
+    "dev": "pnpm --parallel --filter './apps/*' dev",
+    "dev:login": "pnpm --filter @repo/login dev",
+    "dev:user": "pnpm --filter @repo/user dev",
+    "dev:admin": "pnpm --filter @repo/admin dev",
+    "build": "pnpm --recursive --filter './apps/*' build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "pnpm --recursive --filter './packages/*' --filter './apps/*' --if-present typecheck",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "eslint": "10.7.0",
+    "prettier": "3.9.5",
+    "prettier-plugin-tailwindcss": "0.8.0",
+    "typescript": "6.0.3"
+  }
+}
