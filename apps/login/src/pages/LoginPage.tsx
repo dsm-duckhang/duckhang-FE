@@ -24,7 +24,7 @@ function LoginPage() {
             className="text-[1.75rem] leading-[1.3] font-black tracking-[-0.055em] text-neutral-950"
           >
             덕질은 소비가 아니라
-            <span className="mt-2 block w-fit rounded-xl bg-neutral-950 px-3 py-1.5 text-[2.55rem] leading-tight tracking-[-0.065em] text-white">
+            <span className="journey-title-enter mt-2 block w-fit rounded-xl bg-neutral-950 px-3 py-1.5 text-[2.55rem] leading-tight tracking-[-0.065em] text-white">
               ‘여행’이다.
             </span>
           </h1>
