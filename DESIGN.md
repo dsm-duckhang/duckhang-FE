@@ -4,8 +4,8 @@
 
 - Status: Active
 - Last refreshed: 2026-07-13
-- Primary product surfaces: 로그인 앱의 모바일 로그인 랜딩
-- Evidence reviewed: 사용자 제공 모바일 로그인 레퍼런스, `README.md`, `CONVENTIONS.md`, `apps/login/src`
+- Primary product surfaces: 로그인 앱의 모바일 로그인 랜딩과 Google 인증 상태
+- Evidence reviewed: 사용자 제공 모바일 로그인 레퍼런스·인증 API 계약, `README.md`, `CONVENTIONS.md`, `apps/login/src`
 
 ## Brand
 
@@ -17,7 +17,7 @@
 ## Product goals
 
 - Goals: 처음 방문한 사용자가 덕행의 성격과 유일한 로그인 수단을 즉시 이해하도록 한다.
-- Non-goals: 실제 OAuth 연동, 행사·스탬프·마이페이지 라우팅, 완성된 브랜드 아이콘 제공
+- Non-goals: 로그아웃, 행사·스탬프·마이페이지 라우팅, 완성된 브랜드 아이콘 제공
 - Success signals: Google 로그인 버튼과 핵심 내비게이션을 작은 화면에서도 혼동 없이 찾을 수 있다.
 
 ## Personas and jobs
@@ -29,7 +29,7 @@
 ## Information architecture
 
 - Primary navigation: 행사, 홈, 스탬프, 마이페이지
-- Core routes/screens: 로그인 앱 `/`
+- Core routes/screens: 로그인 앱 `/`, OAuth 결과 처리 `/oauth/callback`, 인증 성공 후 사용자 앱 `/`
 - Content hierarchy: 브랜드 헤더, 핵심 브랜드 메시지, Google 로그인, 인증 안내, 하단 내비게이션, 햄버거 메뉴 바텀시트
 
 ## Design principles
@@ -71,12 +71,12 @@
 ## Interaction states
 
 - Menu: 햄버거 버튼으로 바텀시트를 열고 배경·닫기 버튼·Escape 키로 닫으며, 메뉴 선택 시 푸터 활성 상태를 동기화한다.
-- Loading: 실제 OAuth 연동 시 정의
+- Loading: OAuth 로그인 페이지로 이동 중 버튼을 비활성화하고 진행 상태를 표시한다.
 - Empty: 해당 없음
-- Error: 실제 OAuth 연동 시 버튼 인접 영역에 제공
-- Success: 실제 OAuth 연동 시 사용자 앱으로 이동
-- Disabled: 실제 요청 중 Google 버튼 비활성화에 사용
-- Offline/slow network, if applicable: 실제 OAuth 연동 시 오류 상태로 안내
+- Error: OAuth callback 실패 시 백엔드가 제공하는 오류 리다이렉트를 표시한다.
+- Success: 백엔드가 세션을 설정하고 사용자 앱으로 리다이렉트한다.
+- Disabled: 리다이렉트 시작 후 Google 버튼을 비활성화해 중복 이동을 막는다.
+- Offline/slow network, if applicable: 브라우저의 페이지 이동 실패 상태를 따른다.
 
 ## Content voice
 
@@ -88,12 +88,12 @@
 
 - Framework/styling system: React, TypeScript, Tailwind CSS, React Router DOM
 - Design-token constraints: 브랜드 토큰이 없으므로 앱 내부 Tailwind 중립 색상만 사용한다.
-- Performance constraints: 아이콘 패키지나 이미지 의존성을 추가하지 않는다.
+- Performance constraints: OAuth 시작을 브라우저 리다이렉트로 처리하며 별도 Google SDK를 추가하지 않는다.
 - Compatibility constraints: `100dvh`와 `100vh` fallback을 함께 사용한다.
-- Test/screenshot expectations: 저장소 정책상 테스트 파일은 추가하지 않고 typecheck, lint, build와 주요 뷰포트 육안 검증을 수행한다.
+- Test/screenshot expectations: 저장소 정책상 테스트 파일은 추가하지 않고 typecheck, lint, build, 실제 Google 인증과 앱 간 쿠키 공유를 검증한다.
 
 ## Open questions
 
 - [ ] 최종 브랜드 컬러와 나머지 아이콘 에셋 확정 / 제품 담당 / 활성 상태 표현에 영향
-- [ ] 실제 Google OAuth 계약과 연결 시점 확정 / 인증 담당 / 버튼 상태와 오류 처리에 영향
+- [x] refresh token은 백엔드 HttpOnly 쿠키로 관리하고 access token 만료 시 사용자 앱에서 재발급 / 인증 담당
 - [ ] 행사·스탬프·마이페이지 목적지 라우트 확정 / 제품 담당 / 하단 내비게이션 동작에 영향
