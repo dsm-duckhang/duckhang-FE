@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
 import App from '@/App'
+import AdminEventsPage from '@/pages/AdminEventsPage'
 import AdminHomePage from '@/pages/AdminHomePage'
 import AdminPlaceholderPage from '@/pages/AdminPlaceholderPage'
 
@@ -14,12 +15,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'events',
-        element: (
-          <AdminPlaceholderPage
-            description="행사 등록과 관리 기능을 준비하고 있어요."
-            title="행사"
-          />
-        ),
+        element: <AdminEventsPage />,
       },
       {
         path: 'stamps',
