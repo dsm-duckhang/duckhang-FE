@@ -87,6 +87,21 @@ function MyPage() {
       ]
     : null
   const roleLabel = profile.role === 'USER' ? '일반 회원' : profile.role
+  const levelRange = profile.level
+    ? (profile.level.nextLevelMinStamps ?? profile.level.stampCount) -
+      profile.level.currentLevelMinStamps
+    : 0
+  const levelProgress = profile.level
+    ? profile.level.nextLevelMinStamps === null || levelRange <= 0
+      ? 100
+      : Math.min(
+          100,
+          Math.max(
+            0,
+            ((profile.level.stampCount - profile.level.currentLevelMinStamps) / levelRange) * 100,
+          ),
+        )
+    : 0
 
   return (
     <section className="flex min-h-[calc(100dvh-9.5rem)] flex-col px-4 pt-5 pb-8">
@@ -120,23 +135,40 @@ function MyPage() {
 
       {profile.level && levelStats && (
         <section aria-labelledby="level-summary-title" className="mt-6">
-          <div className="flex items-end justify-between px-1">
-            <div>
-              <p className="text-[0.65rem] font-semibold tracking-[-0.02em] text-neutral-400">
-                나의 여정 레벨
-              </p>
-              <h2
-                className="mt-0.5 text-lg font-black tracking-[-0.04em] text-neutral-950"
-                id="level-summary-title"
+          <div className="px-1">
+            <p className="text-[0.65rem] font-semibold tracking-[-0.02em] text-neutral-400">
+              나의 여정 레벨
+            </p>
+            <h2
+              className="mt-0.5 text-lg font-black tracking-[-0.04em] text-neutral-950"
+              id="level-summary-title"
+            >
+              Lv.{profile.level.level} {profile.level.name}
+            </h2>
+
+            <div className="mt-3">
+              <div
+                aria-label="다음 레벨 진행률"
+                aria-valuemax={profile.level.nextLevelMinStamps ?? profile.level.stampCount}
+                aria-valuemin={profile.level.currentLevelMinStamps}
+                aria-valuenow={profile.level.stampCount}
+                className="h-2 overflow-hidden rounded-full bg-neutral-200"
+                role="progressbar"
               >
-                Lv.{profile.level.level} {profile.level.name}
-              </h2>
+                <div
+                  className="h-full rounded-full bg-neutral-950"
+                  style={{ width: `${levelProgress}%` }}
+                />
+              </div>
+              <div className="mt-1.5 flex justify-between text-[0.65rem] font-semibold text-neutral-500">
+                <span>현재 {profile.level.stampCount}개</span>
+                <span>
+                  {profile.level.nextLevelMinStamps === null
+                    ? '최고 레벨'
+                    : `다음 레벨 ${profile.level.nextLevelMinStamps}개`}
+                </span>
+              </div>
             </div>
-            {profile.level.stampsToNextLevel !== null && (
-              <p className="pb-0.5 text-xs font-semibold text-neutral-500">
-                다음 레벨까지 {profile.level.stampsToNextLevel}개
-              </p>
-            )}
           </div>
 
           <dl className="mt-3 grid grid-cols-2 overflow-hidden rounded-2xl border border-[#d8d3cb] bg-white">
