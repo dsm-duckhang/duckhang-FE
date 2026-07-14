@@ -28,6 +28,7 @@ Google 로그인은 백엔드가 OAuth 리다이렉트 흐름을 소유합니다
 ```dotenv
 VITE_API_BASE_URL=https://keenness-kinetic-improper.ngrok-free.dev
 VITE_USER_APP_URL=http://localhost:3001
+VITE_ADMIN_APP_URL=http://localhost:3002
 ```
 
 환경변수에는 백엔드 base URL만 설정하고, `/api/auth/google/login`, `/api/auth/refresh` 같은 경로는

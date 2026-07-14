@@ -1,18 +1,21 @@
-import { useCallback, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import AppHeader from '@/components/AppHeader'
-import AppMenuSheet from '@/components/AppMenuSheet'
 import BottomNavigation from '@/components/BottomNavigation'
 import type { NavigationItemLabel } from '@/components/BottomNavigation'
 import GoogleLoginButton from '@/features/auth/GoogleLoginButton'
 
 function LoginPage() {
-  const [currentItem, setCurrentItem] = useState<NavigationItemLabel>('홈')
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const closeMenu = useCallback(() => setIsMenuOpen(false), [])
+  const navigate = useNavigate()
+
+  const handleNavigationSelect = (item: NavigationItemLabel) => {
+    if (item !== '홈') {
+      navigate('/', { replace: true })
+    }
+  }
 
   return (
     <div className="relative mx-auto flex min-h-dvh min-h-screen w-full max-w-[430px] flex-col overflow-hidden bg-white shadow-[0_0_32px_rgba(0,0,0,0.06)]">
-      <AppHeader onMenuClick={() => setIsMenuOpen(true)} />
+      <AppHeader />
 
       <main className="flex flex-1 flex-col justify-center px-7 py-10 sm:px-9">
         <section aria-labelledby="login-title" className="w-full">
@@ -35,20 +38,19 @@ function LoginPage() {
 
           <div className="mt-12">
             <GoogleLoginButton />
-            <p className="mt-4 text-center text-xs leading-5 text-neutral-500">
-              덕행은 Google 계정으로만 가입 및 로그인할 수 있어요.
-            </p>
+            <div className="mx-auto mt-7 w-[72%] border-t border-neutral-200 pt-5 text-center">
+              <Link
+                className="inline-flex min-h-11 items-center justify-center rounded-lg px-4 text-sm font-semibold tracking-[-0.02em] text-neutral-500 transition-colors hover:bg-neutral-50 hover:text-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950"
+                to="/admin/login"
+              >
+                관리자 로그인
+              </Link>
+            </div>
           </div>
         </section>
       </main>
 
-      <BottomNavigation currentItem={currentItem} onItemSelect={setCurrentItem} />
-      <AppMenuSheet
-        currentItem={currentItem}
-        isOpen={isMenuOpen}
-        onClose={closeMenu}
-        onItemSelect={setCurrentItem}
-      />
+      <BottomNavigation currentItem="홈" onItemSelect={handleNavigationSelect} />
     </div>
   )
 }
