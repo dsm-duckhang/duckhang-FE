@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import App from '@/App'
 import EventsPage from '@/pages/EventsPage'
+import EventDetailPage from '@/pages/EventDetailPage'
 import HomePage from '@/pages/HomePage'
 import MyPage from '@/pages/MyPage'
 import StampPage from '@/pages/StampPage'
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: 'events',
         element: <EventsPage />,
+      },
+      {
+        path: 'events/:id',
+        element: <EventDetailPage />,
       },
       {
         path: 'stamp',

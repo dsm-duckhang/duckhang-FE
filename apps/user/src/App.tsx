@@ -89,7 +89,7 @@ function App() {
         menuLabel={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
         onMenuClick={() => setIsMenuOpen((isOpen) => !isOpen)}
       />
-      <main className="flex-1">
+      <main className="flex flex-1 flex-col">
         <Outlet />
       </main>
       <BottomNavigation />
