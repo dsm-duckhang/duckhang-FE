@@ -1,8 +1,19 @@
-import type { AuthCookieOptions, AuthUser, OAuthCallbackSession } from './types'
+import type {
+  AdminAuthSession,
+  AdminAuthUser,
+  AuthCookieOptions,
+  AuthUser,
+  OAuthCallbackSession,
+} from './types'
 
 const cookieNames = {
   accessToken: 'duckhang_access_token',
   user: 'duckhang_auth_user',
+} as const
+
+const adminCookieNames = {
+  accessToken: 'duckhang_admin_access_token',
+  user: 'duckhang_admin_auth_user',
 } as const
 
 const legacyCookieNames = ['duckhang_refresh_token', 'duckhang_token_type'] as const
@@ -76,6 +87,35 @@ function parseAuthUser(value: string | null): AuthUser | null {
   return null
 }
 
+function parseAdminAuthUser(value: string | null): AdminAuthUser | null {
+  if (!value) {
+    return null
+  }
+
+  try {
+    const user: unknown = JSON.parse(value)
+
+    if (typeof user !== 'object' || user === null) {
+      return null
+    }
+
+    const adminId = Reflect.get(user, 'adminId')
+    const username = Reflect.get(user, 'username')
+
+    if (
+      (typeof adminId !== 'number' && typeof adminId !== 'string' && adminId !== null) ||
+      typeof username !== 'string' ||
+      !username
+    ) {
+      return null
+    }
+
+    return { adminId, username }
+  } catch {
+    return null
+  }
+}
+
 export function getAccessToken() {
   return readCookie(cookieNames.accessToken)
 }
@@ -110,6 +150,14 @@ export function getStoredAuthUser() {
   return parseAuthUser(readCookie(cookieNames.user))
 }
 
+export function getAdminAccessToken() {
+  return readCookie(adminCookieNames.accessToken)
+}
+
+export function getStoredAdminAuthUser() {
+  return parseAdminAuthUser(readCookie(adminCookieNames.user))
+}
+
 export function writeAuthCookies(data: OAuthCallbackSession, options?: AuthCookieOptions) {
   const user: AuthUser = { userId: data.userId ?? null, newUser: data.newUser }
 
@@ -120,4 +168,18 @@ export function writeAuthCookies(data: OAuthCallbackSession, options?: AuthCooki
 export function removeAuthCookies(options?: AuthCookieOptions) {
   const cookiesToRemove = [...Object.values(cookieNames), ...legacyCookieNames]
   cookiesToRemove.forEach((name) => removeCookie(name, options))
+}
+
+export function writeAdminAuthCookies(data: AdminAuthSession, options?: AuthCookieOptions) {
+  const user: AdminAuthUser = {
+    adminId: data.adminId ?? null,
+    username: data.username,
+  }
+
+  writeCookie(adminCookieNames.accessToken, data.accessToken, options)
+  writeCookie(adminCookieNames.user, JSON.stringify(user), options)
+}
+
+export function removeAdminAuthCookies(options?: AuthCookieOptions) {
+  Object.values(adminCookieNames).forEach((name) => removeCookie(name, options))
 }

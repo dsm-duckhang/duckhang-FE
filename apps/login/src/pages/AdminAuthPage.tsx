@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react'
+import {
+  clearAdminAuthSession,
+  getAdminAccessToken,
+  isAccessTokenExpired,
+  setAdminAuthSession,
+  useAdminAuthStore,
+} from '@repo/auth'
 import { useMutation } from '@tanstack/react-query'
 import type { FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { getAdminAuthErrorMessage, requestAdminAuth } from '@/features/auth/api/adminAuth'
 
 const adminAppUrl = import.meta.env.VITE_ADMIN_APP_URL || 'http://localhost:3002'
+const cookieDomain = import.meta.env.VITE_AUTH_COOKIE_DOMAIN?.trim() || undefined
 
 interface AdminAuthPageProps {
   mode: 'login' | 'signup'
@@ -31,6 +39,11 @@ const authContent = {
 
 function AdminAuthPage({ mode }: AdminAuthPageProps) {
   const content = authContent[mode]
+  const isAdminAuthenticated = useAdminAuthStore((state) => state.isAuthenticated)
+  const adminAccessToken = getAdminAccessToken()
+  const hasValidAdminSession = Boolean(
+    isAdminAuthenticated && adminAccessToken && !isAccessTokenExpired(adminAccessToken),
+  )
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
@@ -39,10 +52,24 @@ function AdminAuthPage({ mode }: AdminAuthPageProps) {
     mutationKey: ['admin-auth', mode],
     mutationFn: (credentials: { username: string; password: string }) =>
       requestAdminAuth(mode, credentials),
-    onSuccess: () => {
+    onSuccess: (session) => {
+      if (mode === 'login' && session) {
+        setAdminAuthSession(session, { domain: cookieDomain })
+      }
       setIsSuccessToastVisible(true)
     },
   })
+
+  useEffect(() => {
+    if (hasValidAdminSession && !isSuccessToastVisible) {
+      window.location.replace(adminAppUrl)
+      return
+    }
+
+    if (isAdminAuthenticated && !hasValidAdminSession) {
+      clearAdminAuthSession({ domain: cookieDomain })
+    }
+  }, [hasValidAdminSession, isAdminAuthenticated, isSuccessToastVisible])
 
   useEffect(() => {
     if (!isSuccessToastVisible) return
@@ -68,6 +95,18 @@ function AdminAuthPage({ mode }: AdminAuthPageProps) {
   const errorMessage = authMutation.isError
     ? getAdminAuthErrorMessage(authMutation.error, content.errorMessage)
     : null
+
+  if (hasValidAdminSession && !isSuccessToastVisible) {
+    return (
+      <main
+        aria-live="polite"
+        className="flex min-h-dvh min-h-screen items-center justify-center px-6 text-center text-sm text-neutral-600"
+        role="status"
+      >
+        관리자 화면으로 이동 중…
+      </main>
+    )
+  }
 
   return (
     <main className="mx-auto flex min-h-dvh min-h-screen w-full max-w-[430px] bg-white px-7 py-12 shadow-[0_0_32px_rgba(0,0,0,0.06)] sm:px-9 sm:py-16">

@@ -13,6 +13,17 @@ export interface OAuthCallbackSession {
   newUser: boolean
 }
 
+export interface AdminAuthUser {
+  adminId: number | string | null
+  username: string
+}
+
+export interface AdminAuthSession {
+  accessToken: string
+  adminId?: number | string
+  username: string
+}
+
 export interface RefreshAuthOptions extends AuthCookieOptions {
   apiBaseUrl: string
 }
