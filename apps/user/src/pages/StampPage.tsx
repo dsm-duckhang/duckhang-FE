@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getLevel } from '@/features/levels/api/getLevel'
+import type { LevelSummary } from '@/features/levels/model/level'
 import { getStamps } from '@/features/stamps/api/getStamps'
 import type { StampItem } from '@/features/stamps/model/stamps'
 
@@ -30,10 +32,24 @@ function LockIcon() {
 function StampPage() {
   const navigate = useNavigate()
   const [stamps, setStamps] = useState<StampItem[]>([])
+  const [level, setLevel] = useState<LevelSummary | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isLevelLoading, setIsLevelLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
+  const [levelErrorMessage, setLevelErrorMessage] = useState('')
   const [requestKey, setRequestKey] = useState(0)
   const unlockedCount = stamps.filter((stamp) => stamp.status === 'UNLOCKED').length
+  const levelRange = level
+    ? (level.nextLevelMinStamps ?? level.stampCount) - level.currentLevelMinStamps
+    : 0
+  const levelProgress = level
+    ? level.nextLevelMinStamps === null || levelRange <= 0
+      ? 100
+      : Math.min(
+          100,
+          Math.max(0, ((level.stampCount - level.currentLevelMinStamps) / levelRange) * 100),
+        )
+    : 0
 
   useEffect(() => {
     const controller = new AbortController()
@@ -50,9 +66,26 @@ function StampPage() {
     return () => controller.abort()
   }, [requestKey])
 
+  useEffect(() => {
+    const controller = new AbortController()
+    getLevel(controller.signal)
+      .then(setLevel)
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === 'AbortError') return
+        setLevel(null)
+        setLevelErrorMessage(error instanceof Error ? error.message : '레벨을 불러오지 못했어요.')
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setIsLevelLoading(false)
+      })
+    return () => controller.abort()
+  }, [requestKey])
+
   function handleRetry() {
     setIsLoading(true)
+    setIsLevelLoading(true)
     setErrorMessage('')
+    setLevelErrorMessage('')
     setRequestKey((key) => key + 1)
   }
 
@@ -70,21 +103,69 @@ function StampPage() {
         </p>
       </header>
 
-      {!isLoading && !errorMessage && (
+      {!isLevelLoading && level && (
         <section
-          aria-label="내 스탬프 현황"
+          aria-labelledby="level-title"
           className="mt-6 rounded-[1.6rem] bg-black px-5 py-5 text-white"
         >
-          <p className="text-[0.65rem] font-medium text-neutral-300">획득한 스탬프</p>
-          <p className="mt-1 text-[1.4rem] leading-tight font-black tracking-[-0.04em]">
-            {unlockedCount} / {stamps.length}
-          </p>
-          <p className="mt-3 text-xs font-medium tracking-[-0.025em] text-neutral-300">
-            {stamps.length - unlockedCount > 0
-              ? `${stamps.length - unlockedCount}개의 스탬프가 남았어요`
-              : '모든 스탬프를 획득했어요!'}
-          </p>
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className="text-[0.65rem] font-medium text-neutral-300">나의 여정 레벨</p>
+              <h2
+                className="mt-1 text-[1.4rem] leading-tight font-black tracking-[-0.04em]"
+                id="level-title"
+              >
+                Lv.{level.level} {level.name}
+              </h2>
+            </div>
+            <p className="shrink-0 text-right text-xs font-semibold text-neutral-300">
+              스탬프 <strong className="text-base font-black text-white">{level.stampCount}</strong>
+              개
+            </p>
+          </div>
+
+          <div className="mt-5">
+            <div
+              aria-label="다음 레벨 진행률"
+              aria-valuemax={level.nextLevelMinStamps ?? level.stampCount}
+              aria-valuemin={level.currentLevelMinStamps}
+              aria-valuenow={level.stampCount}
+              className="h-2 overflow-hidden rounded-full bg-neutral-700"
+              role="progressbar"
+            >
+              <div
+                className="h-full rounded-full bg-white"
+                style={{ width: `${levelProgress}%` }}
+              />
+            </div>
+            <p className="mt-2 text-xs font-medium tracking-[-0.025em] text-neutral-300">
+              {level.stampsToNextLevel === null
+                ? '최고 레벨에 도달했어요!'
+                : `스탬프 ${level.stampsToNextLevel}개를 더 모으면 다음 레벨이에요`}
+            </p>
+          </div>
         </section>
+      )}
+
+      {isLevelLoading && (
+        <div className="mt-6 h-40 animate-pulse rounded-[1.6rem] bg-neutral-200" role="status">
+          <span className="sr-only">레벨을 불러오는 중이에요…</span>
+        </div>
+      )}
+
+      {!isLevelLoading && levelErrorMessage && (
+        <div className="mt-6 rounded-[1.6rem] border border-neutral-200 px-5 py-5 text-center">
+          <p className="text-sm text-red-600" role="alert">
+            {levelErrorMessage}
+          </p>
+          <button
+            className="mt-3 min-h-10 rounded-full border px-5 text-sm font-bold"
+            onClick={handleRetry}
+            type="button"
+          >
+            다시 시도
+          </button>
+        </div>
       )}
 
       {isLoading && (
