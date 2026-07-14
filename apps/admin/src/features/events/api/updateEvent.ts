@@ -1,17 +1,18 @@
 import { getAdminAccessToken } from '@repo/auth'
-import type { EventCategoryCode } from '@/features/events/model/events'
+import type { EventCategoryCode, EventItem } from '@/features/events/model/events'
 
 const apiBaseUrl = (
   import.meta.env.VITE_API_BASE_URL || 'https://keenness-kinetic-improper.ngrok-free.dev'
 ).replace(/\/+$/, '')
 
-export interface CreateEventRequest {
+export interface UpdateEventRequest {
   title: string
   category: EventCategoryCode
   categoryLabel: string
   description: string
   venueName: string
   address: string
+  imageUrl: string
   relatedLink: string
   latitude: number
   longitude: number
@@ -19,11 +20,9 @@ export interface CreateEventRequest {
   endAt: string
 }
 
-interface CreateEventResponse {
+interface UpdateEventResponse {
   success: boolean
-  data: {
-    id: number
-  } | null
+  data: EventItem
   error: unknown
 }
 
@@ -39,19 +38,21 @@ function getErrorMessage(payload: unknown) {
     return typeof message === 'string' ? message : null
   }
 
-  const message = Reflect.get(payload, 'message')
-  return typeof message === 'string' ? message : null
+  return null
 }
 
-export async function createEvent(body: CreateEventRequest, imageFile: File) {
+export async function updateEvent(id: number, body: UpdateEventRequest, imageFile: File | null) {
   const accessToken = getAdminAccessToken()
   const formData = new FormData()
 
   formData.append('event', new Blob([JSON.stringify(body)], { type: 'application/json' }))
-  formData.append('image', imageFile)
 
-  const response = await fetch(`${apiBaseUrl}/api/events`, {
-    method: 'POST',
+  if (imageFile) {
+    formData.append('image', imageFile)
+  }
+
+  const response = await fetch(`${apiBaseUrl}/api/events/${id}`, {
+    method: 'PUT',
     credentials: 'include',
     headers: {
       'ngrok-skip-browser-warning': 'true',
@@ -62,12 +63,24 @@ export async function createEvent(body: CreateEventRequest, imageFile: File) {
   const payload: unknown = await response.json().catch(() => null)
 
   if (!response.ok) {
-    throw new Error(getErrorMessage(payload) ?? `행사를 등록하지 못했어요. (${response.status})`)
+    const fallbackMessage =
+      response.status === 404
+        ? '존재하지 않거나 삭제된 행사예요.'
+        : `행사를 수정하지 못했어요. (${response.status})`
+    throw new Error(getErrorMessage(payload) ?? fallbackMessage)
   }
 
-  if (typeof payload !== 'object' || payload === null || Reflect.get(payload, 'success') !== true) {
-    throw new Error(getErrorMessage(payload) ?? '행사 등록 응답이 올바르지 않아요.')
+  const data = typeof payload === 'object' && payload !== null ? Reflect.get(payload, 'data') : null
+
+  if (
+    typeof payload !== 'object' ||
+    payload === null ||
+    Reflect.get(payload, 'success') !== true ||
+    typeof data !== 'object' ||
+    data === null
+  ) {
+    throw new Error(getErrorMessage(payload) ?? '행사 수정 응답이 올바르지 않아요.')
   }
 
-  return payload as CreateEventResponse
+  return (payload as UpdateEventResponse).data
 }

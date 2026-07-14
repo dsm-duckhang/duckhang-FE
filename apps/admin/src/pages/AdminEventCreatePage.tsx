@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { createEvent, type EventCategoryCode } from '@/features/events/api/createEvent'
+import { createEvent } from '@/features/events/api/createEvent'
+import {
+  getImageFileError,
+  imageFileAccept,
+  normalizeImageFile,
+} from '@/features/events/lib/imageFile'
+import type { EventCategoryCode } from '@/features/events/model/events'
 
 const categories = [
   { code: 'POPUP_STORE', label: '팝업스토어' },
@@ -10,9 +16,6 @@ const categories = [
 
 const inputClassName =
   'min-h-16 w-full rounded-[1.25rem] border border-transparent bg-neutral-100 px-6 text-[0.95rem] text-neutral-950 outline-none transition focus:border-neutral-400 focus:bg-white placeholder:text-neutral-400'
-const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp']
-const maxImageSize = 10 * 1024 * 1024
-
 function toIsoString(value: string) {
   return new Date(value).toISOString()
 }
@@ -39,26 +42,25 @@ function AdminEventCreatePage() {
     const file = event.target.files?.[0] ?? null
     setErrorMessage('')
 
-    if (file && !allowedImageTypes.includes(file.type)) {
-      event.target.value = ''
-      setErrorMessage('JPG, PNG, WEBP 이미지만 등록할 수 있어요.')
-      return
-    }
+    if (file) {
+      const fileError = getImageFileError(file)
 
-    if (file && file.size > maxImageSize) {
-      event.target.value = ''
-      setErrorMessage('이미지는 10MB 이하만 등록할 수 있어요.')
-      return
+      if (fileError) {
+        event.target.value = ''
+        setErrorMessage(fileError)
+        return
+      }
     }
 
     if (imagePreviewUrlRef.current) {
       URL.revokeObjectURL(imagePreviewUrlRef.current)
     }
 
-    const nextPreviewUrl = file ? URL.createObjectURL(file) : ''
+    const normalizedFile = file ? normalizeImageFile(file) : null
+    const nextPreviewUrl = normalizedFile ? URL.createObjectURL(normalizedFile) : ''
     imagePreviewUrlRef.current = nextPreviewUrl
     setImagePreviewUrl(nextPreviewUrl)
-    setImageFile(file)
+    setImageFile(normalizedFile)
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -71,7 +73,6 @@ function AdminEventCreatePage() {
     }
 
     const formData = new FormData(event.currentTarget)
-    const now = new Date().toISOString()
     const selectedCategory = categories.find((item) => item.code === category)
     setIsSubmitting(true)
 
@@ -89,8 +90,6 @@ function AdminEventCreatePage() {
           longitude: Number(formData.get('longitude')),
           startAt: toIsoString(String(formData.get('startAt'))),
           endAt: toIsoString(String(formData.get('endAt'))),
-          createdAt: now,
-          updatedAt: now,
         },
         imageFile,
       )
@@ -140,7 +139,7 @@ function AdminEventCreatePage() {
               </div>
             )}
             <input
-              accept="image/jpeg,image/png,image/webp"
+              accept={imageFileAccept}
               aria-label="썸네일 이미지 선택"
               className="sr-only"
               name="image"
@@ -151,7 +150,7 @@ function AdminEventCreatePage() {
           </label>
           <div className="mt-3 flex items-center justify-between gap-3 px-1 text-xs text-neutral-500">
             <span className="truncate">{imageFile?.name ?? '선택된 파일 없음'}</span>
-            <span className="shrink-0">JPG, PNG, WEBP · 최대 10MB</span>
+            <span className="shrink-0">JPG, PNG, WEBP · 최대 5MB</span>
           </div>
         </fieldset>
 
