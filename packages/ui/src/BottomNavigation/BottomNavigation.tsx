@@ -23,7 +23,10 @@ function BottomNavigation<ItemLabel extends string>({
       aria-label="주요 메뉴"
       className="sticky bottom-0 z-20 shrink-0 border-t border-neutral-100 bg-white px-3 pb-[env(safe-area-inset-bottom)]"
     >
-      <ul className="grid h-21 grid-cols-4">
+      <ul
+        className="grid h-21"
+        style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}
+      >
         {items.map(({ icon, isDisabled = false, label }) => {
           const isCurrent = currentItem === label
 
