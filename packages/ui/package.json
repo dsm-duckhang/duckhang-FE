@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./assets/duck": "./src/assets/duck.ts",
     "./home-content": "./src/HomeContent/HomeContent.tsx"
   },
   "scripts": {

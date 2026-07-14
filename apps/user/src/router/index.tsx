@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import App from '@/App'
 import EventsPage from '@/pages/EventsPage'
 import HomePage from '@/pages/HomePage'
+import MyPage from '@/pages/MyPage'
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: 'events',
         element: <EventsPage />,
+      },
+      {
+        path: 'mypage',
+        element: <MyPage />,
       },
     ],
   },
