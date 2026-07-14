@@ -1,7 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom'
-import AppHeader from '@/components/AppHeader'
-import BottomNavigation from '@/components/BottomNavigation'
-import type { NavigationItemLabel } from '@/components/BottomNavigation'
+import { AppHeader, BottomNavigation } from '@repo/ui'
+import logo from '@/assets/images/logo.png'
+import { navigationItems } from '@/components/BottomNavigation/navigationItems'
+import type { NavigationItemLabel } from '@/components/BottomNavigation/navigationItems'
 import GoogleLoginButton from '@/features/auth/GoogleLoginButton'
 
 function LoginPage() {
@@ -15,7 +16,7 @@ function LoginPage() {
 
   return (
     <div className="relative mx-auto flex min-h-dvh min-h-screen w-full max-w-[430px] flex-col overflow-hidden bg-white shadow-[0_0_32px_rgba(0,0,0,0.06)]">
-      <AppHeader />
+      <AppHeader hasMenuButton={false} logoSrc={logo} />
 
       <main className="flex flex-1 flex-col justify-center px-7 py-10 sm:px-9">
         <section aria-labelledby="login-title" className="w-full">
@@ -50,7 +51,11 @@ function LoginPage() {
         </section>
       </main>
 
-      <BottomNavigation currentItem="홈" onItemSelect={handleNavigationSelect} />
+      <BottomNavigation
+        currentItem="홈"
+        items={navigationItems}
+        onItemSelect={handleNavigationSelect}
+      />
     </div>
   )
 }

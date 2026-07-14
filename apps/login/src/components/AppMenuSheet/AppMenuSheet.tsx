@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { navigationItems } from '@/components/BottomNavigation'
-import type { NavigationItemLabel } from '@/components/BottomNavigation'
-import IconPlaceholder from '@/components/IconPlaceholder'
+import { AppIcon } from '@repo/ui'
+import { navigationItems } from '@/components/BottomNavigation/navigationItems'
+import type { NavigationItemLabel } from '@/components/BottomNavigation/navigationItems'
 
 interface AppMenuSheetProps {
   currentItem: NavigationItemLabel
@@ -61,7 +61,7 @@ function AppMenuSheet({ currentItem, isOpen, onClose, onItemSelect }: AppMenuShe
             onClick={onClose}
             type="button"
           >
-            <IconPlaceholder name="close" />
+            <AppIcon name="close" />
           </button>
         </div>
 
@@ -81,7 +81,7 @@ function AppMenuSheet({ currentItem, isOpen, onClose, onItemSelect }: AppMenuShe
                   onClick={() => handleItemSelect(label)}
                   type="button"
                 >
-                  <IconPlaceholder name={icon} size={24} />
+                  <AppIcon name={icon} size={24} />
                   {label}
                 </button>
               </li>

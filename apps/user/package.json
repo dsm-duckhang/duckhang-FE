@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@repo/auth": "workspace:*",
+    "@repo/ui": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-router-dom": "catalog:"

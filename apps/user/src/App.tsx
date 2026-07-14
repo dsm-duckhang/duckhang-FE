@@ -5,6 +5,10 @@ import {
   refreshAuthSession,
   useAuthStore,
 } from '@repo/auth'
+import { AppHeader } from '@repo/ui'
+import { Outlet } from 'react-router-dom'
+import logo from '@/assets/images/logo.png'
+import BottomNavigation from '@/components/BottomNavigation'
 
 const loginAppUrl = import.meta.env.VITE_LOGIN_APP_URL || 'http://localhost:3000'
 const apiBaseUrl =
@@ -13,7 +17,6 @@ const cookieDomain = import.meta.env.VITE_AUTH_COOKIE_DOMAIN?.trim() || undefine
 
 function App() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
-  const user = useAuthStore((state) => state.user)
   const [isCheckingSession, setIsCheckingSession] = useState(true)
 
   useEffect(() => {
@@ -43,7 +46,7 @@ function App() {
     }
   }, [isAuthenticated])
 
-  if (isCheckingSession || !isAuthenticated || !user) {
+  if (isCheckingSession || !isAuthenticated) {
     return (
       <main className="flex min-h-dvh min-h-screen items-center justify-center px-6 text-center text-sm text-neutral-600">
         로그인 상태 확인 중…
@@ -52,12 +55,13 @@ function App() {
   }
 
   return (
-    <main className="flex min-h-dvh min-h-screen flex-col items-center justify-center gap-2 px-6 text-center">
-      <h1 className="text-2xl font-bold text-neutral-950">사용자 홈</h1>
-      <p className="text-sm text-neutral-600">
-        {user.newUser ? '가입이 완료됐어요.' : '다시 만나서 반가워요.'}
-      </p>
-    </main>
+    <div className="mx-auto flex min-h-dvh min-h-screen w-full max-w-[430px] flex-col bg-white shadow-[0_0_32px_rgba(0,0,0,0.06)]">
+      <AppHeader isMenuDisabled logoSrc={logo} menuLabel="메뉴 준비 중" />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <BottomNavigation />
+    </div>
   )
 }
 

@@ -1,11 +1,14 @@
-type IconName = 'bell' | 'calendar' | 'close' | 'home' | 'menu' | 'search' | 'stamp' | 'user'
+import type { ReactNode } from 'react'
 
-interface IconPlaceholderProps {
-  name: IconName
+type AppIconName =
+  'bell' | 'calendar' | 'close' | 'home' | 'location' | 'menu' | 'search' | 'stamp' | 'user'
+
+interface AppIconProps {
+  name: AppIconName
   size?: number
 }
 
-const paths: Record<IconName, React.ReactNode> = {
+const iconPaths: Record<AppIconName, ReactNode> = {
   bell: (
     <>
       <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
@@ -24,6 +27,12 @@ const paths: Record<IconName, React.ReactNode> = {
     <>
       <path d="m3 11 9-8 9 8" />
       <path d="M5 10v10h14V10M9 20v-6h6v6" />
+    </>
+  ),
+  location: (
+    <>
+      <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+      <circle cx="12" cy="10" r="2.5" />
     </>
   ),
   menu: <path d="M4 6h16M4 12h16M4 18h16" />,
@@ -47,7 +56,7 @@ const paths: Record<IconName, React.ReactNode> = {
   ),
 }
 
-function IconPlaceholder({ name, size = 24 }: IconPlaceholderProps) {
+function AppIcon({ name, size = 24 }: AppIconProps) {
   return (
     <svg
       aria-hidden="true"
@@ -58,10 +67,11 @@ function IconPlaceholder({ name, size = 24 }: IconPlaceholderProps) {
       xmlns="http://www.w3.org/2000/svg"
     >
       <g stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8">
-        {paths[name]}
+        {iconPaths[name]}
       </g>
     </svg>
   )
 }
 
-export default IconPlaceholder
+export default AppIcon
+export type { AppIconName, AppIconProps }

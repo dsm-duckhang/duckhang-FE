@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 450" role="img" aria-labelledby="title desc">
+  <title id="title">성수 팝업 포스터</title>
+  <desc id="desc">푸른 하늘 아래 붉은 벽돌 건물과 반짝이는 별이 있는 포스터</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#bde6ff"/><stop offset="1" stop-color="#f5fbff"/></linearGradient>
+    <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset=".58" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#101820" stop-opacity=".82"/></linearGradient>
+  </defs>
+  <rect width="360" height="450" rx="18" fill="url(#sky)"/>
+  <path d="M42 423V213l92-66 12 276Z" fill="#6c3228"/><path d="M133 423V102l181 91v230Z" fill="#9e473b"/>
+  <g fill="#84b6cf" stroke="#2a3338" stroke-width="5"><path d="m163 154 55 25v55l-55-19Z"/><path d="m239 188 50 23v58l-50-20Z"/><path d="m165 248 54 14v58l-54-9Z"/><path d="m241 275 48 10v57l-48-5Z"/></g>
+  <g fill="#f7d7d2"><path d="m91 174 12 24-12 25-12-25Z"/><path d="m320 137 10 20-10 20-10-20Z"/></g>
+  <g fill="#a7efff"><path d="m260 106 14 29 29 14-29 14-14 29-14-29-29-14 29-14Z"/><path d="m110 277 10 21 21 10-21 10-10 21-10-21-21-10 21-10Z"/></g>
+  <rect width="360" height="450" rx="18" fill="url(#shade)"/>
+  <text x="35" y="345" font-family="Arial, sans-serif" font-size="24" font-weight="800" fill="#fff">투쿨</text>
+  <text x="35" y="380" font-family="Arial, sans-serif" font-size="29" font-weight="700" fill="#fff">with 에스더버니</text>
+  <text x="35" y="411" font-family="Arial, sans-serif" font-size="16" fill="#fff">지금 서울숲은 버니 천국</text>
+</svg>

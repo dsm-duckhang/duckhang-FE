@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 450" role="img" aria-labelledby="title desc">
+  <title id="title">자존감 운동회 포스터</title>
+  <desc id="desc">색종이와 귀여운 동물 캐릭터가 그려진 연두색 포스터</desc>
+  <rect width="360" height="450" rx="18" fill="#e9f5df"/>
+  <path d="M0 54 360 20v72L0 125Z" fill="#e9f5df"/>
+  <g stroke="#18251c" stroke-width="2">
+    <path d="M0 60 22 48l9 28 25-17 8 29 27-20 8 29 28-21 6 29 30-21 7 29 28-22 8 29 28-22 8 27 31-20 5 24 31-15" fill="none"/>
+    <path d="m16 55 19-9-5 26Z" fill="#ffd500"/><path d="m57 59 18-13-3 28Z" fill="#ef6e9b"/><path d="m100 69 17-13-2 28Z" fill="#1bb9df"/><path d="m145 79 18-14-2 29Z" fill="#ffd500"/><path d="m193 86 17-14-1 29Z" fill="#ef6e9b"/><path d="m240 89 19-12-4 29Z" fill="#1bb9df"/><path d="m294 85 18-10-5 27Z" fill="#ffd500"/>
+  </g>
+  <text x="180" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="900" fill="#db3d35" stroke="#17201a" stroke-width="1">자존감</text>
+  <text x="180" y="188" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="900" fill="#db3d35" stroke="#17201a" stroke-width="1">운동회</text>
+  <g stroke="#1c2920" stroke-width="3">
+    <ellipse cx="86" cy="326" rx="58" ry="71" fill="#ffd20a"/><circle cx="73" cy="277" r="17" fill="#fff"/><circle cx="102" cy="276" r="17" fill="#fff"/><path d="M70 315c13 12 27 12 40 0" fill="none"/>
+    <ellipse cx="181" cy="313" rx="71" ry="82" fill="#84d4e3"/><circle cx="158" cy="265" r="23" fill="#84d4e3"/><circle cx="207" cy="265" r="23" fill="#84d4e3"/><path d="M159 314c14 18 31 18 45 0" fill="none"/>
+    <ellipse cx="285" cy="326" rx="54" ry="73" fill="#f3a9ad"/><path d="m252 275 6-42 28 33 27-30-2 47" fill="#f3a9ad"/><path d="M268 319c11 12 23 12 35 0" fill="none"/>
+  </g>
+  <rect x="22" y="388" width="316" height="42" rx="12" fill="#fff" fill-opacity=".78"/>
+  <text x="180" y="414" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="700" fill="#26342b">나답게 즐기는 오늘의 마음 운동회</text>
+</svg>
