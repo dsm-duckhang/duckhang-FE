@@ -39,6 +39,7 @@ function App() {
     const menuPaths: Partial<Record<AppSideMenuItemLabel, string>> = {
       홈: '/',
       행사: '/events',
+      스탬프: '/stamp',
       마이페이지: '/mypage',
     }
     const path = menuPaths[item]
@@ -93,7 +94,6 @@ function App() {
       </main>
       <BottomNavigation />
       <AppSideMenu
-        disabledItems={['스탬프']}
         isOpen={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
         onItemSelect={handleMenuItemSelect}

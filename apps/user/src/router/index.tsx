@@ -3,6 +3,7 @@ import App from '@/App'
 import EventsPage from '@/pages/EventsPage'
 import HomePage from '@/pages/HomePage'
 import MyPage from '@/pages/MyPage'
+import StampPage from '@/pages/StampPage'
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: 'events',
         element: <EventsPage />,
+      },
+      {
+        path: 'stamp',
+        element: <StampPage />,
       },
       {
         path: 'mypage',
