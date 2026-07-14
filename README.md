@@ -58,4 +58,10 @@ token은 백엔드 도메인의 HttpOnly 쿠키로만 관리합니다. Google Cl
 `VITE_API_BASE_URL`의 `/api/auth/refresh`를 `credentials: include`로 호출해 백엔드 HttpOnly refresh cookie로 토큰을
 재발급하고, 실패한 경우에만 로그인 앱으로 되돌립니다. 재발급 응답의 refresh token은 프론트에
 저장하지 않으며 백엔드의 `Set-Cookie` 회전에 맡깁니다.
-`apps/admin`은 초기 화면만 렌더링합니다.
+관리자 로그인은 성공 응답의 `data.accessToken`을 사용자 세션과 분리된
+`duckhang_admin_access_token`, `duckhang_admin_auth_user` 쿠키에 저장한 뒤 관리자 앱으로
+이동합니다. `apps/admin`은 진입 시 관리자 access token의 존재 여부와 만료 시점을 검사하고,
+유효하지 않으면 로그인 앱의 `/admin/login`으로 되돌립니다. 여러 서브도메인에서 앱을 운영할
+때는 로그인 앱과 관리자 앱의 `VITE_AUTH_COOKIE_DOMAIN`을 동일하게 설정합니다.
+로그인 앱의 `/`과 `/admin/login`, `/admin/signup`은 저장된 역할별 세션을 확인하며, 이미
+로그인된 사용자는 로그인 폼을 다시 보여 주지 않고 사용자 또는 관리자 앱으로 이동시킵니다.
