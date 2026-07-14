@@ -10,20 +10,28 @@ const banners = [
   { alt: '덕행 추천 콘텐츠 배너', src: banner3 },
 ] as const
 
-const rankings = [
-  { color: '#d9c8f2', name: '리센느' },
-  { color: '#c6dcef', name: 'CORTIS' },
-  { color: '#f3c6bc', name: '에스파' },
-  { color: '#e4d0ef', name: '하츠투하츠' },
-  { color: '#bedde2', name: '아일릿' },
-  { color: '#e6c9b7', name: '라이즈' },
-  { color: '#c9d5ef', name: '아이브' },
-  { color: '#efc7d4', name: '르세라핌' },
-  { color: '#cadfc8', name: '엔믹스' },
-  { color: '#e8d7a8', name: '키키' },
-] as const
+export interface HomeRankingArtist {
+  rank: number
+  name: string
+  imageUrl: string
+  profileUrl: string
+}
 
-function HomeContent() {
+interface HomeContentProps {
+  rankings?: HomeRankingArtist[]
+  rankingPeriod?: string
+  isRankingsLoading?: boolean
+  rankingErrorMessage?: string
+  onRankingRetry?: () => void
+}
+
+function HomeContent({
+  rankings = [],
+  rankingPeriod = '',
+  isRankingsLoading = false,
+  rankingErrorMessage = '',
+  onRankingRetry = () => {},
+}: HomeContentProps) {
   const carouselRef = useRef<HTMLDivElement>(null)
   const dragStartRef = useRef({ left: 0, x: 0 })
   const [activeBanner, setActiveBanner] = useState(0)
@@ -147,24 +155,54 @@ function HomeContent() {
         >
           인기랭킹
         </h1>
+        {rankingPeriod && (
+          <p className="mt-1 text-center text-xs tracking-[-0.02em] text-neutral-400">
+            {rankingPeriod}
+          </p>
+        )}
 
-        <ol className="mt-7 grid grid-flow-col grid-cols-2 grid-rows-5 gap-x-7 gap-y-5">
-          {rankings.map(({ color, name }, index) => (
-            <li className="flex min-w-0 items-center gap-3" key={`${index}-${name}`}>
-              <span className="w-5 shrink-0 text-right text-2xl font-medium text-neutral-500 tabular-nums">
-                {index + 1}
-              </span>
-              <span
-                aria-hidden="true"
-                className="size-11 shrink-0 rounded-lg"
-                style={{ backgroundColor: color }}
-              />
-              <span className="truncate text-sm font-medium tracking-[-0.02em] text-neutral-600">
-                {name}
-              </span>
-            </li>
-          ))}
-        </ol>
+        {isRankingsLoading && (
+          <p className="mt-7 py-10 text-center text-sm text-neutral-500">불러오는 중…</p>
+        )}
+        {!isRankingsLoading && rankingErrorMessage && (
+          <div className="mt-7 flex flex-col items-center gap-3 py-10 text-center">
+            <p className="text-sm text-red-600" role="alert">
+              {rankingErrorMessage}
+            </p>
+            <button
+              className="min-h-10 rounded-full border px-5 text-sm font-bold"
+              onClick={onRankingRetry}
+              type="button"
+            >
+              다시 시도
+            </button>
+          </div>
+        )}
+        {!isRankingsLoading && !rankingErrorMessage && rankings.length === 0 && (
+          <p className="mt-7 py-10 text-center text-sm text-neutral-500">인기 랭킹이 없어요.</p>
+        )}
+        {!isRankingsLoading && !rankingErrorMessage && rankings.length > 0 && (
+          <ol className="mt-7 grid grid-flow-col grid-cols-2 grid-rows-5 gap-x-7 gap-y-5">
+            {rankings.map(({ imageUrl, name, profileUrl, rank }) => (
+              <li className="min-w-0" key={`${rank}-${name}`}>
+                <a
+                  className="flex items-center gap-3"
+                  href={profileUrl}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <span className="w-5 shrink-0 text-right text-2xl font-medium text-neutral-500 tabular-nums">
+                    {rank}
+                  </span>
+                  <img alt="" className="size-11 shrink-0 rounded-lg object-cover" src={imageUrl} />
+                  <span className="truncate text-sm font-medium tracking-[-0.02em] text-neutral-600">
+                    {name}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        )}
       </section>
     </section>
   )
