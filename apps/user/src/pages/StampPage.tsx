@@ -134,7 +134,7 @@ function StampPage() {
               role="progressbar"
             >
               <div
-                className="h-full rounded-full bg-white"
+                className="level-progress-fill h-full origin-left rounded-full bg-white"
                 style={{ width: `${levelProgress}%` }}
               />
             </div>

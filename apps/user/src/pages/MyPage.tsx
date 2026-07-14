@@ -154,7 +154,7 @@ function MyPage() {
                 role="progressbar"
               >
                 <div
-                  className="h-full rounded-full bg-neutral-950"
+                  className="level-progress-fill h-full origin-left rounded-full bg-neutral-950"
                   style={{ width: `${levelProgress}%` }}
                 />
               </div>
