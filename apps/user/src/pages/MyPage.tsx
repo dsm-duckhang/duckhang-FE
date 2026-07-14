@@ -82,8 +82,6 @@ function MyPage() {
           label: '다음 레벨까지',
           value: profile.level.stampsToNextLevel ?? '-',
         },
-        { label: '현재 레벨 기준', value: profile.level.currentLevelMinStamps },
-        { label: '다음 레벨 기준', value: profile.level.nextLevelMinStamps ?? '-' },
       ]
     : null
   const roleLabel = profile.role === 'USER' ? '일반 회원' : profile.role
@@ -175,8 +173,8 @@ function MyPage() {
             {levelStats.map(({ label, value }, index) => (
               <div
                 className={`flex min-h-20 flex-col items-center justify-center ${
-                  index % 2 === 1 ? 'border-l border-[#e4e0da]' : ''
-                } ${index > 1 ? 'border-t border-[#e4e0da]' : ''}`}
+                  index === 1 ? 'border-l border-[#e4e0da]' : ''
+                }`}
                 key={label}
               >
                 <dt className="order-2 mt-1.5 text-[0.65rem] leading-none font-medium text-neutral-500">
