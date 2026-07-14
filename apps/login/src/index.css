@@ -38,6 +38,30 @@
   }
 }
 
+@keyframes login-toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes login-toast-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
+  }
+}
+
 @layer base {
   html {
     font-family: Inter, Pretendard, ui-sans-serif, system-ui, sans-serif;
@@ -83,12 +107,24 @@
     transform-origin: left center;
     will-change: transform, opacity;
   }
+
+  .login-toast-enter {
+    animation: login-toast-enter 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    will-change: transform, opacity;
+  }
+
+  .login-toast-exit {
+    animation: login-toast-exit 220ms ease-in both;
+    will-change: transform, opacity;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .menu-backdrop-enter,
   .menu-sheet-enter,
-  .journey-title-enter {
+  .journey-title-enter,
+  .login-toast-enter,
+  .login-toast-exit {
     animation: none;
   }
 }

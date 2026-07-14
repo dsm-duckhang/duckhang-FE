@@ -1,4 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { AppHeader, BottomNavigation } from '@repo/ui'
 import logo from '@/assets/images/logo.png'
 import { navigationItems } from '@/components/BottomNavigation/navigationItems'
@@ -6,12 +7,46 @@ import type { NavigationItemLabel } from '@/components/BottomNavigation/navigati
 import GoogleLoginButton from '@/features/auth/GoogleLoginButton'
 
 function LoginPage() {
-  const navigate = useNavigate()
+  const toastExitTimerRef = useRef<number | null>(null)
+  const toastRemoveTimerRef = useRef<number | null>(null)
+  const [isToastExiting, setIsToastExiting] = useState(false)
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
+
+  useEffect(
+    () => () => {
+      if (toastExitTimerRef.current !== null) {
+        window.clearTimeout(toastExitTimerRef.current)
+      }
+      if (toastRemoveTimerRef.current !== null) {
+        window.clearTimeout(toastRemoveTimerRef.current)
+      }
+    },
+    [],
+  )
 
   const handleNavigationSelect = (item: NavigationItemLabel) => {
-    if (item !== '홈') {
-      navigate('/', { replace: true })
+    if (item === '홈') return
+
+    setToastMessage(`${item} 메뉴는 로그인 후 이용할 수 있어요.`)
+    setIsToastExiting(false)
+
+    if (toastExitTimerRef.current !== null) {
+      window.clearTimeout(toastExitTimerRef.current)
     }
+    if (toastRemoveTimerRef.current !== null) {
+      window.clearTimeout(toastRemoveTimerRef.current)
+    }
+
+    toastExitTimerRef.current = window.setTimeout(() => {
+      setIsToastExiting(true)
+      toastExitTimerRef.current = null
+    }, 2280)
+
+    toastRemoveTimerRef.current = window.setTimeout(() => {
+      setToastMessage(null)
+      setIsToastExiting(false)
+      toastRemoveTimerRef.current = null
+    }, 2500)
   }
 
   return (
@@ -56,6 +91,18 @@ function LoginPage() {
         items={navigationItems}
         onItemSelect={handleNavigationSelect}
       />
+
+      {toastMessage && (
+        <div
+          aria-live="polite"
+          className={`${
+            isToastExiting ? 'login-toast-exit' : 'login-toast-enter'
+          } pointer-events-none absolute right-5 bottom-[calc(5.25rem+env(safe-area-inset-bottom)+0.75rem)] left-5 z-30 mx-auto max-w-sm rounded-2xl bg-neutral-900 px-5 py-3.5 text-center text-sm font-semibold tracking-[-0.02em] text-white shadow-[0_8px_24px_rgba(0,0,0,0.2)]`}
+          role="status"
+        >
+          {toastMessage}
+        </div>
+      )}
     </div>
   )
 }
