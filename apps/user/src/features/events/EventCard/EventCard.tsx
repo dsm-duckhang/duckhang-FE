@@ -8,10 +8,10 @@ interface EventCardProps {
 function EventCard({ event }: EventCardProps) {
   return (
     <article className="min-w-0">
-      <img
-        alt={`${event.title} 포스터`}
-        className="aspect-4/5 w-full rounded-[0.55rem] bg-neutral-100 object-cover"
-        src={event.poster}
+      <div
+        aria-hidden="true"
+        className="aspect-4/5 w-full rounded-[0.55rem]"
+        style={{ backgroundColor: event.posterColor }}
       />
       <h2 className="mt-2.5 truncate text-[0.98rem] leading-6 font-bold tracking-[-0.025em] text-slate-700">
         {event.title}

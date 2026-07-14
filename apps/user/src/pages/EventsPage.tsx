@@ -12,32 +12,19 @@ function EventsPage() {
 
   return (
     <section aria-labelledby="events-title" className="px-5 pt-12 pb-10">
-      <div className="flex items-center justify-between gap-4">
-        <div className="min-w-0">
-          <h1
-            id="events-title"
-            className="text-2xl leading-tight font-black tracking-[-0.045em] text-neutral-950"
-          >
-            행사
-          </h1>
-          <p className="mt-1 text-[0.95rem] tracking-[-0.025em] text-stone-400">
-            진행중이거나 다가오는 덕질 여정이에요
-          </p>
-        </div>
-        <button
-          aria-disabled="true"
-          className="h-11 shrink-0 cursor-not-allowed rounded-full bg-black px-5 text-sm font-medium text-white"
-          disabled
-          title="준비 중인 기능입니다"
-          type="button"
-        >
-          행사 추가
-        </button>
-      </div>
+      <h1
+        id="events-title"
+        className="text-2xl leading-tight font-black tracking-[-0.045em] text-neutral-950"
+      >
+        행사
+      </h1>
+      <p className="mt-1 text-[0.95rem] tracking-[-0.025em] text-stone-400">
+        진행중이거나 다가오는 덕질 여정이에요
+      </p>
 
       <div
         aria-label="행사 카테고리"
-        className="mt-8 flex items-center justify-between"
+        className="mt-8 flex items-center gap-2 overflow-x-auto"
         role="group"
       >
         {eventCategories.map((category) => {
@@ -46,10 +33,10 @@ function EventsPage() {
           return (
             <button
               aria-pressed={isSelected}
-              className={`min-h-10 rounded-full px-3.5 text-sm font-bold tracking-[-0.02em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 ${
+              className={`min-h-10 rounded-full border px-3.5 text-sm font-bold tracking-[-0.02em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 ${
                 isSelected
-                  ? 'bg-black text-white'
-                  : 'bg-white text-neutral-900 hover:bg-neutral-100'
+                  ? 'border-transparent bg-black text-white'
+                  : 'border-neutral-300 bg-white text-neutral-900 hover:border-neutral-400 hover:bg-neutral-50'
               }`}
               key={category}
               onClick={() => setSelectedCategory(category)}

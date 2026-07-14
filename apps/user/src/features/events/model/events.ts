@@ -1,8 +1,3 @@
-import breadPoster from '@/assets/images/events/bread-popup.svg'
-import fleaPoster from '@/assets/images/events/flea-market.svg'
-import selfLovePoster from '@/assets/images/events/self-love-festival.svg'
-import summerPoster from '@/assets/images/events/summer-cafe.svg'
-
 const eventCategories = ['전체', '팝업스토어', '콘서트', '카페'] as const
 
 type EventCategory = (typeof eventCategories)[number]
@@ -14,7 +9,7 @@ interface EventItem {
   title: string
   location: string
   period: string
-  poster: string
+  posterColor: string
 }
 
 const events: EventItem[] = [
@@ -24,7 +19,7 @@ const events: EventItem[] = [
     title: '더쿨디스트모먼트 팝업',
     location: '성수',
     period: '26. 07. 16 - 26. 07. 19',
-    poster: fleaPoster,
+    posterColor: '#E8DED1',
   },
   {
     id: 2,
@@ -32,7 +27,7 @@ const events: EventItem[] = [
     title: '수키도키 팝업 - 자존감 운동회',
     location: '성수',
     period: '26. 07. 10 - 26. 09. 07',
-    poster: selfLovePoster,
+    posterColor: '#DCE8DF',
   },
   {
     id: 3,
@@ -40,7 +35,7 @@ const events: EventItem[] = [
     title: '박뚜기 소금빵 × 요정',
     location: '연남',
     period: '26. 07. 07 - 26. 07. 21',
-    poster: breadPoster,
+    posterColor: '#E9E0CD',
   },
   {
     id: 4,
@@ -48,7 +43,7 @@ const events: EventItem[] = [
     title: '투쿨 with 에스더버니',
     location: '성수',
     period: '26. 07. 18 - 26. 08. 02',
-    poster: summerPoster,
+    posterColor: '#D9E5EE',
   },
 ]
 
