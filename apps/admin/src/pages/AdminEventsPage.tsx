@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import EventCard from '@/features/events/EventCard'
 import { eventCategories, events } from '@/features/events/model/events'
 import type { EventCategory } from '@/features/events/model/events'
 
 function AdminEventsPage() {
+  const navigate = useNavigate()
   const [selectedCategory, setSelectedCategory] = useState<EventCategory>('전체')
   const filteredEvents =
     selectedCategory === '전체'
@@ -25,10 +27,8 @@ function AdminEventsPage() {
           </p>
         </div>
         <button
-          aria-disabled="true"
-          className="h-11 shrink-0 cursor-not-allowed rounded-full bg-black px-5 text-sm font-medium text-white"
-          disabled
-          title="준비 중인 기능입니다"
+          className="h-11 shrink-0 rounded-full bg-black px-5 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950"
+          onClick={() => navigate('/events/new')}
           type="button"
         >
           행사 추가

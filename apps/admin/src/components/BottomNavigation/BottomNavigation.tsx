@@ -21,8 +21,9 @@ function BottomNavigation() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const currentItem =
-    (Object.entries(navigationPaths).find(([, path]) => path === pathname)?.[0] as
-      NavigationItemLabel | undefined) ?? '홈'
+    (Object.entries(navigationPaths).find(([, path]) =>
+      path === '/events' ? pathname.startsWith(path) : path === pathname,
+    )?.[0] as NavigationItemLabel | undefined) ?? '홈'
 
   return (
     <SharedBottomNavigation

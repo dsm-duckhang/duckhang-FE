@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import App from '@/App'
 import AdminEventsPage from '@/pages/AdminEventsPage'
+import AdminEventCreatePage from '@/pages/AdminEventCreatePage'
 import AdminHomePage from '@/pages/AdminHomePage'
 import AdminPlaceholderPage from '@/pages/AdminPlaceholderPage'
 
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: 'events',
         element: <AdminEventsPage />,
+      },
+      {
+        path: 'events/new',
+        element: <AdminEventCreatePage />,
       },
       {
         path: 'stamps',
