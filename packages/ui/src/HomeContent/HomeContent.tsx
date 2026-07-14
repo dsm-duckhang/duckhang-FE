@@ -137,7 +137,10 @@ function HomeContent() {
         </div>
       </div>
 
-      <section aria-labelledby="popular-ranking-title" className="mx-auto mt-24 max-w-sm">
+      <section
+        aria-labelledby="popular-ranking-title"
+        className="mx-auto mt-24 max-w-sm scroll-mt-24"
+      >
         <h1
           className="text-center text-2xl font-extrabold tracking-[-0.04em] text-neutral-950"
           id="popular-ranking-title"

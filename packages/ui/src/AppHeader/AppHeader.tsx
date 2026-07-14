@@ -5,6 +5,7 @@ const HEADER_HEIGHT = 68
 const SCROLL_DIRECTION_THRESHOLD = 6
 
 interface AppHeaderProps {
+  isMenuOpen?: boolean
   logoAlt?: string
   logoSrc: string
   menuLabel?: string
@@ -16,6 +17,7 @@ interface AppHeaderProps {
 function AppHeader({
   hasMenuButton = true,
   isMenuDisabled = false,
+  isMenuOpen = false,
   logoAlt = '덕행',
   logoSrc,
   menuLabel = '메뉴 열기',
@@ -56,6 +58,8 @@ function AppHeader({
     >
       {hasMenuButton ? (
         <button
+          aria-controls={onMenuClick ? 'app-side-menu' : undefined}
+          aria-expanded={onMenuClick ? isMenuOpen : undefined}
           aria-label={menuLabel}
           className={`flex size-11 items-center justify-center rounded-xl text-neutral-950 ${
             isMenuDisabled

@@ -5,8 +5,9 @@ import {
   refreshAuthSession,
   useAuthStore,
 } from '@repo/auth'
-import { AppHeader } from '@repo/ui'
-import { Outlet } from 'react-router-dom'
+import { AppHeader, AppSideMenu } from '@repo/ui'
+import type { AppSideMenuItemLabel } from '@repo/ui'
+import { Outlet, useNavigate } from 'react-router-dom'
 import logo from '@/assets/images/logo.png'
 import BottomNavigation from '@/components/BottomNavigation'
 
@@ -16,8 +17,33 @@ const apiBaseUrl =
 const cookieDomain = import.meta.env.VITE_AUTH_COOKIE_DOMAIN?.trim() || undefined
 
 function App() {
+  const navigate = useNavigate()
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const [isCheckingSession, setIsCheckingSession] = useState(true)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const handleMenuItemSelect = (item: AppSideMenuItemLabel) => {
+    if (item === '랭킹') {
+      navigate('/#popular-ranking-title')
+      window.setTimeout(() => {
+        document.getElementById('popular-ranking-title')?.scrollIntoView({
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+            ? 'auto'
+            : 'smooth',
+          block: 'start',
+        })
+      }, 0)
+      return
+    }
+
+    const menuPaths: Partial<Record<AppSideMenuItemLabel, string>> = {
+      홈: '/',
+      행사: '/events',
+      마이페이지: '/mypage',
+    }
+    const path = menuPaths[item]
+    if (path) navigate(path)
+  }
 
   useEffect(() => {
     let isActive = true
@@ -56,11 +82,22 @@ function App() {
 
   return (
     <div className="mx-auto flex min-h-dvh min-h-screen w-full max-w-[430px] flex-col bg-white shadow-[0_0_32px_rgba(0,0,0,0.06)]">
-      <AppHeader isMenuDisabled logoSrc={logo} menuLabel="메뉴 준비 중" />
+      <AppHeader
+        isMenuOpen={isMenuOpen}
+        logoSrc={logo}
+        menuLabel={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+        onMenuClick={() => setIsMenuOpen((isOpen) => !isOpen)}
+      />
       <main className="flex-1">
         <Outlet />
       </main>
       <BottomNavigation />
+      <AppSideMenu
+        disabledItems={['스탬프']}
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        onItemSelect={handleMenuItemSelect}
+      />
     </div>
   )
 }
