@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { clearAuthSession } from '@repo/auth'
 import duckImage from '@repo/ui/assets/duck'
 import { getMyProfile, MyProfileRequestError } from '@/features/auth/api/getMyProfile'
+import { requestLogout } from '@/features/auth/api/logout'
 import type { MyProfile } from '@/features/auth/model/profile'
 
 const loginAppUrl = import.meta.env.VITE_LOGIN_APP_URL || 'http://localhost:3000'
@@ -12,6 +13,7 @@ function MyPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
   const [requestKey, setRequestKey] = useState(0)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -37,9 +39,19 @@ function MyPage() {
     return () => controller.abort()
   }, [requestKey])
 
-  const handleLogout = () => {
-    clearAuthSession({ domain: cookieDomain })
-    window.location.replace(loginAppUrl)
+  const handleLogout = async () => {
+    if (isLoggingOut) return
+
+    setIsLoggingOut(true)
+
+    try {
+      await requestLogout()
+    } catch {
+      // 만료된 토큰이나 네트워크 오류가 있어도 로컬 세션은 반드시 종료한다.
+    } finally {
+      clearAuthSession({ domain: cookieDomain })
+      window.location.replace(loginAppUrl)
+    }
   }
 
   const handleRetry = () => {
@@ -209,11 +221,12 @@ function MyPage() {
       </section>
 
       <button
-        className="mt-2.5 ml-auto min-h-11 rounded-lg px-1 text-xs font-medium text-neutral-400 transition-colors hover:text-neutral-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950"
+        className="mt-2.5 ml-auto min-h-11 rounded-lg px-1 text-xs font-medium text-neutral-400 transition-colors hover:text-neutral-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 disabled:cursor-not-allowed disabled:text-neutral-300"
+        disabled={isLoggingOut}
         onClick={handleLogout}
         type="button"
       >
-        로그아웃
+        {isLoggingOut ? '로그아웃 중…' : '로그아웃'}
       </button>
 
       <div className="mt-auto flex justify-center pt-8 pb-2">
