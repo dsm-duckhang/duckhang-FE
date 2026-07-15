@@ -1,4 +1,5 @@
 export type EventCategoryCode = 'POPUP_STORE' | 'CONCERT' | 'CAFE'
+export type EventStartSortOrder = 'ASC' | 'DESC'
 
 export interface EventItem {
   id: number
@@ -25,4 +26,9 @@ const eventCategories = [
   { label: '카페', value: 'CAFE' },
 ] as const satisfies ReadonlyArray<{ label: string; value: EventCategoryCode | null }>
 
-export { eventCategories }
+const eventStartSortOptions = [
+  { label: '시작일 빠른순', value: 'ASC' },
+  { label: '시작일 느린순', value: 'DESC' },
+] as const satisfies ReadonlyArray<{ label: string; value: EventStartSortOrder }>
+
+export { eventCategories, eventStartSortOptions }

@@ -1,15 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import EventCard from '@/features/events/EventCard'
 import { getEvents } from '@/features/events/api/getEvents'
-import { eventCategories } from '@/features/events/model/events'
-import type { EventCategoryCode, EventItem } from '@/features/events/model/events'
+import { sortEventsByStartAt } from '@/features/events/lib/eventPresentation'
+import { eventCategories, eventStartSortOptions } from '@/features/events/model/events'
+import type {
+  EventCategoryCode,
+  EventItem,
+  EventStartSortOrder,
+} from '@/features/events/model/events'
 
 function EventsPage() {
   const [selectedCategory, setSelectedCategory] = useState<EventCategoryCode | null>(null)
+  const [sortOrder, setSortOrder] = useState<EventStartSortOrder>('ASC')
   const [events, setEvents] = useState<EventItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
   const [requestKey, setRequestKey] = useState(0)
+  const sortedEvents = useMemo(() => sortEventsByStartAt(events, sortOrder), [events, sortOrder])
 
   useEffect(() => {
     const controller = new AbortController()
@@ -71,9 +78,27 @@ function EventsPage() {
         })}
       </div>
 
+      <div className="mt-4 flex justify-end">
+        <label className="sr-only" htmlFor="event-start-sort">
+          행사 시작일 정렬
+        </label>
+        <select
+          className="min-h-10 rounded-full border border-neutral-300 bg-white px-4 text-sm font-bold text-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950"
+          id="event-start-sort"
+          onChange={(event) => setSortOrder(event.target.value as EventStartSortOrder)}
+          value={sortOrder}
+        >
+          {eventStartSortOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {!isLoading && !errorMessage && (
         <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-7">
-          {events.map((event) => (
+          {sortedEvents.map((event) => (
             <EventCard event={event} key={event.id} />
           ))}
         </div>

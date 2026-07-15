@@ -1,4 +1,8 @@
-import type { EventCategoryCode } from '@/features/events/model/events'
+import type {
+  EventCategoryCode,
+  EventItem,
+  EventStartSortOrder,
+} from '@/features/events/model/events'
 
 const apiBaseUrl = (
   import.meta.env.VITE_API_BASE_URL || 'https://keenness-kinetic-improper.ngrok-free.dev'
@@ -73,4 +77,25 @@ function getEventStatusLabel(startAt: string, endAt: string) {
   return now <= end ? '진행중' : '종료'
 }
 
-export { formatDate, formatDateTime, getCategoryLabel, getEventStatusLabel, resolveEventImageUrl }
+function sortEventsByStartAt(events: EventItem[], order: EventStartSortOrder) {
+  return [...events].sort((a, b) => {
+    const aTime = new Date(a.startAt).getTime()
+    const bTime = new Date(b.startAt).getTime()
+    const aIsInvalid = Number.isNaN(aTime)
+    const bIsInvalid = Number.isNaN(bTime)
+
+    if (aIsInvalid && bIsInvalid) return 0
+    if (aIsInvalid) return 1
+    if (bIsInvalid) return -1
+    return order === 'ASC' ? aTime - bTime : bTime - aTime
+  })
+}
+
+export {
+  formatDate,
+  formatDateTime,
+  getCategoryLabel,
+  getEventStatusLabel,
+  resolveEventImageUrl,
+  sortEventsByStartAt,
+}
