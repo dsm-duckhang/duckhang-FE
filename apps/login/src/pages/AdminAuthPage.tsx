@@ -3,7 +3,6 @@ import {
   clearAdminAuthSession,
   getAdminAccessToken,
   isAccessTokenExpired,
-  setAdminAuthSession,
   useAdminAuthStore,
 } from '@repo/auth'
 import { useMutation } from '@tanstack/react-query'
@@ -39,10 +38,15 @@ const authContent = {
 
 function AdminAuthPage({ mode }: AdminAuthPageProps) {
   const content = authContent[mode]
+  const hasSessionExpiredError =
+    new URLSearchParams(window.location.search).get('authError') === 'session_expired'
   const isAdminAuthenticated = useAdminAuthStore((state) => state.isAuthenticated)
   const adminAccessToken = getAdminAccessToken()
   const hasValidAdminSession = Boolean(
-    isAdminAuthenticated && adminAccessToken && !isAccessTokenExpired(adminAccessToken),
+    !hasSessionExpiredError &&
+    isAdminAuthenticated &&
+    adminAccessToken &&
+    !isAccessTokenExpired(adminAccessToken),
   )
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -54,11 +58,12 @@ function AdminAuthPage({ mode }: AdminAuthPageProps) {
       requestAdminAuth(mode, credentials),
     onSuccess: (session) => {
       if (mode === 'login' && session) {
-        setAdminAuthSession(session, { domain: cookieDomain })
+        clearAdminAuthSession({ domain: cookieDomain })
       }
       setIsSuccessToastVisible(true)
     },
   })
+  const adminSession = authMutation.data
 
   useEffect(() => {
     if (hasValidAdminSession && !isSuccessToastVisible) {
@@ -75,8 +80,14 @@ function AdminAuthPage({ mode }: AdminAuthPageProps) {
     if (!isSuccessToastVisible) return
 
     const timerId = window.setTimeout(() => {
-      if (mode === 'login') {
-        window.location.replace(adminAppUrl)
+      if (mode === 'login' && adminSession) {
+        const callbackUrl = new URL('/auth/callback', adminAppUrl)
+        callbackUrl.hash = new URLSearchParams({
+          accessToken: adminSession.accessToken,
+          adminId: String(adminSession.adminId ?? ''),
+          username: adminSession.username,
+        }).toString()
+        window.location.replace(callbackUrl.toString())
         return
       }
 
@@ -84,7 +95,7 @@ function AdminAuthPage({ mode }: AdminAuthPageProps) {
     }, 1600)
 
     return () => window.clearTimeout(timerId)
-  }, [isSuccessToastVisible, mode])
+  }, [adminSession, isSuccessToastVisible, mode])
 
   const submitAuth = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()

@@ -14,6 +14,12 @@ import BottomNavigation from '@/components/BottomNavigation'
 const loginAppUrl = import.meta.env.VITE_LOGIN_APP_URL || 'http://localhost:3000'
 const cookieDomain = import.meta.env.VITE_AUTH_COOKIE_DOMAIN?.trim() || undefined
 
+function getSessionExpiredRedirectUrl() {
+  const url = new URL('/admin/login', loginAppUrl)
+  url.searchParams.set('authError', 'session_expired')
+  return url.toString()
+}
+
 function App() {
   const navigate = useNavigate()
   const isAuthenticated = useAdminAuthStore((state) => state.isAuthenticated)
@@ -53,7 +59,7 @@ function App() {
     }
 
     clearAdminAuthSession({ domain: cookieDomain })
-    window.location.replace(`${loginAppUrl.replace(/\/+$/, '')}/admin/login`)
+    window.location.replace(getSessionExpiredRedirectUrl())
   }, [hasValidSession])
 
   if (!hasValidSession) {

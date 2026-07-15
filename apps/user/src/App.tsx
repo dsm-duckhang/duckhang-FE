@@ -16,6 +16,12 @@ const apiBaseUrl =
   import.meta.env.VITE_API_BASE_URL || 'https://keenness-kinetic-improper.ngrok-free.dev'
 const cookieDomain = import.meta.env.VITE_AUTH_COOKIE_DOMAIN?.trim() || undefined
 
+function getSessionExpiredRedirectUrl() {
+  const url = new URL(loginAppUrl)
+  url.searchParams.set('authError', 'session_expired')
+  return url.toString()
+}
+
 function App() {
   const navigate = useNavigate()
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
@@ -64,7 +70,7 @@ function App() {
         }
       } catch {
         clearAuthSession({ domain: cookieDomain })
-        window.location.replace(loginAppUrl)
+        window.location.replace(getSessionExpiredRedirectUrl())
       }
     }
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { setAuthSession } from '@repo/auth'
+import { clearAuthSession } from '@repo/auth'
 
 const userAppUrl = import.meta.env.VITE_USER_APP_URL || 'http://localhost:3001'
 const cookieDomain = import.meta.env.VITE_AUTH_COOKIE_DOMAIN?.trim() || undefined
@@ -61,11 +61,14 @@ function OAuthCallbackPage() {
     window.history.replaceState(null, '', window.location.pathname)
 
     if (result.status === 'success') {
-      setAuthSession(
-        { accessToken: result.accessToken, newUser: result.newUser },
-        { domain: cookieDomain },
-      )
-      window.location.replace(userAppUrl)
+      clearAuthSession({ domain: cookieDomain })
+
+      const callbackUrl = new URL('/oauth/callback', userAppUrl)
+      callbackUrl.hash = new URLSearchParams({
+        accessToken: result.accessToken,
+        newUser: String(result.newUser),
+      }).toString()
+      window.location.replace(callbackUrl.toString())
     }
   }, [result])
 

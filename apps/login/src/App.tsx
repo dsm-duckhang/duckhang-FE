@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import {
+  clearAuthSession,
   clearAdminAuthSession,
   getAccessToken,
   getAdminAccessToken,
@@ -14,16 +15,24 @@ const adminAppUrl = import.meta.env.VITE_ADMIN_APP_URL || 'http://localhost:3002
 const cookieDomain = import.meta.env.VITE_AUTH_COOKIE_DOMAIN?.trim() || undefined
 
 function App() {
+  const hasSessionExpiredError =
+    new URLSearchParams(window.location.search).get('authError') === 'session_expired'
   const isUserAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const isAdminAuthenticated = useAdminAuthStore((state) => state.isAuthenticated)
-  const hasUserSession = Boolean(isUserAuthenticated && getAccessToken())
+  const accessToken = getAccessToken()
+  const hasValidUserSession = Boolean(
+    !hasSessionExpiredError &&
+    isUserAuthenticated &&
+    accessToken &&
+    !isAccessTokenExpired(accessToken),
+  )
   const adminAccessToken = getAdminAccessToken()
   const hasValidAdminSession = Boolean(
     isAdminAuthenticated && adminAccessToken && !isAccessTokenExpired(adminAccessToken),
   )
 
   useEffect(() => {
-    if (hasUserSession) {
+    if (hasValidUserSession) {
       window.location.replace(userAppUrl)
       return
     }
@@ -36,9 +45,13 @@ function App() {
     if (isAdminAuthenticated) {
       clearAdminAuthSession({ domain: cookieDomain })
     }
-  }, [hasUserSession, hasValidAdminSession, isAdminAuthenticated])
 
-  if (hasUserSession || hasValidAdminSession) {
+    if (isUserAuthenticated) {
+      clearAuthSession({ domain: cookieDomain })
+    }
+  }, [hasValidUserSession, hasValidAdminSession, isAdminAuthenticated, isUserAuthenticated])
+
+  if (hasValidUserSession || hasValidAdminSession) {
     return (
       <main
         aria-live="polite"

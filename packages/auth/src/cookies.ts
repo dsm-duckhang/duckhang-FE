@@ -168,6 +168,10 @@ export function writeAuthCookies(data: OAuthCallbackSession, options?: AuthCooki
 export function removeAuthCookies(options?: AuthCookieOptions) {
   const cookiesToRemove = [...Object.values(cookieNames), ...legacyCookieNames]
   cookiesToRemove.forEach((name) => removeCookie(name, options))
+
+  if (options?.domain) {
+    cookiesToRemove.forEach((name) => removeCookie(name))
+  }
 }
 
 export function writeAdminAuthCookies(data: AdminAuthSession, options?: AuthCookieOptions) {
@@ -182,4 +186,8 @@ export function writeAdminAuthCookies(data: AdminAuthSession, options?: AuthCook
 
 export function removeAdminAuthCookies(options?: AuthCookieOptions) {
   Object.values(adminCookieNames).forEach((name) => removeCookie(name, options))
+
+  if (options?.domain) {
+    Object.values(adminCookieNames).forEach((name) => removeCookie(name))
+  }
 }

@@ -4,9 +4,14 @@ import EventsPage from '@/pages/EventsPage'
 import EventDetailPage from '@/pages/EventDetailPage'
 import HomePage from '@/pages/HomePage'
 import MyPage from '@/pages/MyPage'
+import OAuthCallbackPage from '@/pages/OAuthCallbackPage'
 import StampPage from '@/pages/StampPage'
 
 const router = createBrowserRouter([
+  {
+    path: '/oauth/callback',
+    element: <OAuthCallbackPage />,
+  },
   {
     path: '/',
     element: <App />,

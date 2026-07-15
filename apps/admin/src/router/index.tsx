@@ -5,10 +5,15 @@ import AdminEventCreatePage from '@/pages/AdminEventCreatePage'
 import AdminEventDetailPage from '@/pages/AdminEventDetailPage'
 import AdminEventEditPage from '@/pages/AdminEventEditPage'
 import AdminHomePage from '@/pages/AdminHomePage'
+import AdminAuthCallbackPage from '@/pages/AdminAuthCallbackPage'
 import AdminMyPage from '@/pages/AdminMyPage'
 import AdminPlaceholderPage from '@/pages/AdminPlaceholderPage'
 
 const router = createBrowserRouter([
+  {
+    path: '/auth/callback',
+    element: <AdminAuthCallbackPage />,
+  },
   {
     path: '/',
     element: <App />,
