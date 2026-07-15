@@ -47,6 +47,8 @@ function App() {
   }
 
   useEffect(() => {
+    if (!isCheckingSession) return
+
     let isActive = true
 
     async function restoreSession() {
@@ -71,7 +73,7 @@ function App() {
     return () => {
       isActive = false
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, isCheckingSession])
 
   if (isCheckingSession || !isAuthenticated) {
     return (
